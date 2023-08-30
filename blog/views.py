@@ -1,9 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Inclui a classe HttpResponse
 from django.http import HttpResponse
 
+from django.views.generic.detail import DetailView
+
 from blog.models import Post
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "post/detail.html"
+    context_object_name = "post"
+
+
+def post_show(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    return render(request, "post/detail.html", {"post": post})
 
 
 # Define uma function view chamada index
