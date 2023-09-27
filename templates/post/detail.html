@@ -4,6 +4,9 @@
 <!-- substitui o bloco content em _layout1.html -->
 <article>
   <h1>{{ post.pub_date|date:"d / m / Y" }}</h1>
+  {% if post.categoria %}
+  <span>Categoria: {{ post.categoria }}</span>
+  {% endif %}
   <p>{{ post.body_text }}</p>
 </article>
 {% endblock %}
