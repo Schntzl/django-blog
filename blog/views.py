@@ -16,6 +16,9 @@ from blog.forms import PostModelForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class PostDetailView(DetailView):
     model = Post
@@ -29,6 +32,7 @@ def post_show(request, post_id):
 
 
 # Define uma function view chamada index
+@login_required
 def index(request):
     # return HttpResponse('Olá Django - index')
     return render(request, "index.html", {"titulo": "Últimos Artigos"})
@@ -72,7 +76,7 @@ def get_post(request, post_id):
     return response
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "post/post_form.html"
     success_url = reverse_lazy("posts_all")
