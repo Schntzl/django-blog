@@ -14,6 +14,7 @@ from blog.models import Post
 from blog.forms import PostModelForm
 
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 
 
 class PostDetailView(DetailView):
@@ -74,8 +75,13 @@ def get_post(request, post_id):
 class PostCreateView(CreateView):
     model = Post
     template_name = "post/post_form.html"
-    success_url = reverse_lazy("posts_list")
+    success_url = reverse_lazy("posts_all")
     form_class = PostModelForm
+    success_message = "Postagem salva com sucesso."
+
+    def form_valid(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(PostCreateView, self).form_valid(request, *args, **kwargs)
 
 
 @csrf_exempt
