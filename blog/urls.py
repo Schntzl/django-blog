@@ -13,6 +13,10 @@ from blog.views import (
     SobreTemplateView,
 )
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 urlpatterns = [
     path("index/", index, name="index"),
     path("ola/", ola, name="ola"),
@@ -26,3 +30,5 @@ urlpatterns = [
     path("posts", PostListView.as_view(), name="posts_all"),
     path("about-us", SobreTemplateView.as_view(), name="about_page"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
