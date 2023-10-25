@@ -11,6 +11,7 @@ from blog.views import (
     create_post,
     PostListView,
     SobreTemplateView,
+    PostUpdateView,
 )
 
 from django.conf import settings
@@ -29,6 +30,7 @@ urlpatterns = [
     path("api/post/add", create_post, name="create_post_data"),
     path("posts", PostListView.as_view(), name="posts_all"),
     path("about-us", SobreTemplateView.as_view(), name="about_page"),
+    path("post/<int:pk>/edit", PostUpdateView.as_view(), name="post_edit"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 
 from blog.models import Post
@@ -88,6 +88,50 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super(PostCreateView, self).form_valid(request, *args, **kwargs)
 
 
+class PostListView(ListView):
+    model = Post
+    template_name = "post/post_list.html"
+    context_object_name = "posts"
+
+
+class SobreTemplateView(TemplateView):
+    template_name = "post/sobre.html"
+
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    template_name = "post/post_form.html"
+    success_url = reverse_lazy("posts_all")
+    form_class = PostModelForm
+    success_message = "Postagem salva com sucesso."
+
+    def form_valid(self, form):
+        messages.success(self.request, self.success_message)
+        return super(PostUpdateView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(PostCreateView, self).get_context_data(**kwargs)
+        context["form_title"] = "Criando um post"
+        return context
+
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    template_name = "post/post_form.html"
+    success_url = reverse_lazy("posts_all")
+    form_class = PostModelForm
+    success_message = "Postagem salva com sucesso."
+
+    def form_valid(self, form):
+        messages.success(self.request, self.success_message)
+        return super(PostUpdateView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdateView, self).get_context_data(**kwargs)
+        context["form_title"] = "Editando o post"
+        return context
+
+
 @csrf_exempt
 def create_post(request):
     if request.method == "POST":
@@ -113,13 +157,3 @@ def create_post(request):
         )
         response["Access-Control-Allow-Origin"] = "*"
         return response
-
-
-class PostListView(ListView):
-    model = Post
-    template_name = "post/post_list.html"
-    context_object_name = "posts"
-
-
-class SobreTemplateView(TemplateView):
-    template_name = "post/sobre.html"
